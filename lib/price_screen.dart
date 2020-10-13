@@ -3,8 +3,8 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'coin_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 const String url =
     "https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=C1E7F10E-E665-4287-8F6A-1BBC8F0469C2";
@@ -16,7 +16,9 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'AUD';
-  double rateInUsd;
+  // double rateInUsd;
+
+  String bitCoinValueInUsd = '?';
 
   List<DropdownMenuItem> getDropDownItems() {
     List<DropdownMenuItem<String>> dropDownItem = [];
@@ -44,19 +46,34 @@ class _PriceScreenState extends State<PriceScreen> {
 
   @override
   void initState() {
-    getData();
+    // getData();
+    coinData();
     super.initState();
   }
 
-  Future getData() async {
-    http.Response response = await http.get(url);
-    // print(response.body);
-    var decodeddata = await jsonDecode(response.body);
-    // print(decodeddata['time']);
+  // Future getData() async {
+  //   http.Response response = await http.get(url);
+  //   // print(response.body);
+  //   var decodeddata = await jsonDecode(response.body);
+  //   // print(decodeddata['time']);
 
-    rateInUsd = decodeddata['rate'];
+  //   rateInUsd = decodeddata['rate'];
 
-    return decodeddata;
+  //   return decodeddata;
+  // }
+
+  void coinData() async {
+    double rate;
+    CoinData coinData = CoinData();
+    try {
+      var reqdata = await coinData.getCoinData();
+      setState(() {
+        rate = reqdata['rate'];
+        bitCoinValueInUsd = rate.toStringAsFixed(2);
+      });
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
@@ -84,7 +101,8 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ${rateInUsd.toStringAsFixed(2)} USD',
+                  // '1 BTC = ${rateInUsd.toStringAsFixed(2)} USD',
+                  '1 BTC = $bitCoinValueInUsd USD',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
