@@ -35,12 +35,13 @@ const List<String> cryptoList = [
 // const String url =
 //     "https://rest.coinapi.io/v1/exchangerate/BTC/USD?apikey=C1E7F10E-E665-4287-8F6A-1BBC8F0469C2";
 
-const coinUrl = 'https://rest.coinapi.io/v1/exchangerate/BTC/';
-const apiKey = 'C1E7F10E-E665-4287-8F6A-1BBC8F0469C2';
+const coinUrl = 'https://rest.coinapi.io/v1/exchangerate';
+// const apiKey = 'C1E7F10E-E665-4287-8F6A-1BBC8F0469C2';
+const apiKey = '65BBFE46-44C1-4976-81BE-361E95591187';
 
 class CoinData {
-  Future getCoinData(String slectedCurrency) async {
-    String requestUrl = '$coinUrl$slectedCurrency?apikey=$apiKey';
+  Future getCoinData({String slectedCurrency, String type}) async {
+    String requestUrl = '$coinUrl/$type/$slectedCurrency?apikey=$apiKey';
 
     http.Response response = await http.get(requestUrl);
 
